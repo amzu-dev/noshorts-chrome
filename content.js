@@ -82,9 +82,12 @@ function removeShorts() {
     'ytd-reel-video-renderer',
     'ytd-reel-item-renderer',
 
-    // Shorts button in sidebar
+    // Shorts button in sidebar - multiple selectors for reliability
     'ytd-guide-entry-renderer:has(a[href="/shorts"])',
+    'ytd-guide-entry-renderer:has(a[title="Shorts"])',
+    'ytd-guide-entry-renderer:has(.title:text-matches("^Shorts$", i))',
     'ytd-mini-guide-entry-renderer:has(a[href="/shorts"])',
+    'ytd-mini-guide-entry-renderer:has(a[title="Shorts"])',
 
     // Shorts tab on channel pages
     'yt-tab-shape:has(a[href*="/shorts"])',
@@ -123,6 +126,27 @@ function removeShorts() {
       });
     } catch (e) {
       // Ignore invalid selectors
+    }
+  });
+
+  // Additional check: Hide sidebar items with "Shorts" text
+  const guideEntries = document.querySelectorAll('ytd-guide-entry-renderer, ytd-mini-guide-entry-renderer');
+  guideEntries.forEach(entry => {
+    const titleElement = entry.querySelector('yt-formatted-string.title');
+    const linkElement = entry.querySelector('a[title]');
+
+    if (titleElement && titleElement.textContent.trim() === 'Shorts') {
+      if (!entry.hasAttribute('data-noshorts-hidden')) {
+        entry.style.display = 'none';
+        entry.setAttribute('data-noshorts-hidden', 'true');
+      }
+    }
+
+    if (linkElement && linkElement.getAttribute('title') === 'Shorts') {
+      if (!entry.hasAttribute('data-noshorts-hidden')) {
+        entry.style.display = 'none';
+        entry.setAttribute('data-noshorts-hidden', 'true');
+      }
     }
   });
 }

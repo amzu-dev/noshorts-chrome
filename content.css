@@ -23,7 +23,10 @@ body.noshorts-enabled ytd-reel-item-renderer {
 
 /* Shorts navigation in sidebar */
 body.noshorts-enabled ytd-guide-entry-renderer:has(a[href="/shorts"]),
-body.noshorts-enabled ytd-mini-guide-entry-renderer:has(a[href="/shorts"]) {
+body.noshorts-enabled ytd-guide-entry-renderer:has(a[title="Shorts"]),
+body.noshorts-enabled ytd-guide-entry-renderer:has(.title:text-matches("^Shorts$", i)),
+body.noshorts-enabled ytd-mini-guide-entry-renderer:has(a[href="/shorts"]),
+body.noshorts-enabled ytd-mini-guide-entry-renderer:has(a[title="Shorts"]) {
   display: none !important;
 }
 
