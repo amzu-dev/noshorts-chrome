@@ -4,11 +4,17 @@ A simple Chrome extension that hides YouTube Shorts from YouTube with an easy-to
 
 ## Features
 
-- Hide YouTube Shorts from all areas of YouTube (home page, search results, channels, sidebar)
-- Toggle on/off with a single click
-- Clean and modern user interface
-- Automatically syncs your preference across devices
-- Works on dynamically loaded content
+- **Block /shorts/* URLs**: Automatically redirects you to YouTube homepage when trying to access youtube.com/shorts/*
+- **Hide Shorts from YouTube**: Removes shorts from all areas of YouTube:
+  - Home page shorts shelves
+  - Search results
+  - Channel pages
+  - Sidebar navigation
+  - Dynamically loaded content
+- **Toggle on/off**: Simple one-click switch to enable/disable
+- **Clean UI**: Modern, intuitive popup interface
+- **Sync preferences**: Automatically syncs your settings across devices
+- **Smart detection**: Targets the latest YouTube shorts elements (`ytm-shorts-lockup-view-model`)
 
 ## Installation
 
@@ -48,9 +54,11 @@ The extension will:
 ## How It Works
 
 The extension uses:
-- **Content Scripts**: Inject CSS and JavaScript to hide shorts elements
+- **declarativeNetRequest API**: Blocks navigation to /shorts/* URLs (redirects to YouTube homepage)
+- **Background Service Worker**: Manages URL blocking rules based on toggle state
+- **Content Scripts**: Inject CSS and JavaScript to hide shorts elements from the page
 - **MutationObserver**: Detect and hide dynamically loaded shorts
-- **Chrome Storage**: Remember your toggle preference
+- **Chrome Storage**: Remember your toggle preference across sessions
 - **Chrome Messaging**: Sync toggle state between popup and content scripts
 
 ## Files Structure
@@ -58,6 +66,7 @@ The extension uses:
 ```
 noshorts-chrome/
 ├── manifest.json       # Extension configuration
+├── background.js      # Service worker for URL blocking
 ├── popup.html         # Toggle switch UI
 ├── popup.js           # Popup logic
 ├── content.js         # Main script to hide shorts

@@ -65,6 +65,15 @@ function showShorts() {
 function removeShorts() {
   // Selectors for different places where shorts appear on YouTube
   const selectors = [
+    // New shorts lockup view models (main shorts containers)
+    'ytm-shorts-lockup-view-model-v2',
+    'ytm-shorts-lockup-view-model',
+
+    // Rich item renderers containing shorts
+    'ytd-rich-item-renderer:has(ytm-shorts-lockup-view-model-v2)',
+    'ytd-rich-item-renderer:has(ytm-shorts-lockup-view-model)',
+    'ytd-rich-item-renderer:has(a[href^="/shorts/"])',
+
     // Shorts shelf on home page
     'ytd-rich-shelf-renderer[is-shorts]',
     'ytd-reel-shelf-renderer',
@@ -85,12 +94,8 @@ function removeShorts() {
     'ytd-video-renderer:has([href^="/shorts/"])',
     'ytd-grid-video-renderer:has([href^="/shorts/"])',
 
-    // Reel shelf
-    'ytd-reel-shelf-renderer',
-
     // Additional shorts containers
     '[is-shorts]',
-    '[class*="shorts"]',
     'a[href^="/shorts/"]'
   ];
 
@@ -100,8 +105,14 @@ function removeShorts() {
       elements.forEach(element => {
         // Find the closest parent that's a complete item/card
         let target = element;
-        if (element.tagName === 'A') {
-          // For links, hide the parent container
+
+        // For shorts lockup models, hide the parent rich-item-renderer
+        if (element.tagName === 'YTM-SHORTS-LOCKUP-VIEW-MODEL-V2' ||
+            element.tagName === 'YTM-SHORTS-LOCKUP-VIEW-MODEL') {
+          target = element.closest('ytd-rich-item-renderer') || element;
+        }
+        // For links, hide the parent container
+        else if (element.tagName === 'A') {
           target = element.closest('ytd-video-renderer, ytd-grid-video-renderer, ytd-rich-item-renderer, ytd-guide-entry-renderer, ytd-mini-guide-entry-renderer') || element;
         }
 

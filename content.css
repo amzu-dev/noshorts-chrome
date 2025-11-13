@@ -1,22 +1,53 @@
 /* Hide YouTube Shorts elements when enabled */
+
+/* New shorts lockup view models */
+body.noshorts-enabled ytm-shorts-lockup-view-model-v2,
+body.noshorts-enabled ytm-shorts-lockup-view-model {
+  display: none !important;
+}
+
+/* Rich item renderers containing shorts */
+body.noshorts-enabled ytd-rich-item-renderer:has(ytm-shorts-lockup-view-model-v2),
+body.noshorts-enabled ytd-rich-item-renderer:has(ytm-shorts-lockup-view-model),
+body.noshorts-enabled ytd-rich-item-renderer:has(a[href^="/shorts/"]) {
+  display: none !important;
+}
+
+/* Shorts shelves and reels */
 body.noshorts-enabled ytd-rich-shelf-renderer[is-shorts],
 body.noshorts-enabled ytd-reel-shelf-renderer,
 body.noshorts-enabled ytd-reel-video-renderer,
-body.noshorts-enabled ytd-reel-item-renderer,
+body.noshorts-enabled ytd-reel-item-renderer {
+  display: none !important;
+}
+
+/* Shorts navigation in sidebar */
 body.noshorts-enabled ytd-guide-entry-renderer:has(a[href="/shorts"]),
-body.noshorts-enabled ytd-mini-guide-entry-renderer:has(a[href="/shorts"]),
-body.noshorts-enabled yt-tab-shape:has(a[href*="/shorts"]),
+body.noshorts-enabled ytd-mini-guide-entry-renderer:has(a[href="/shorts"]) {
+  display: none !important;
+}
+
+/* Shorts tabs on channel pages */
+body.noshorts-enabled yt-tab-shape:has(a[href*="/shorts"]) {
+  display: none !important;
+}
+
+/* Shorts in search results and grids */
 body.noshorts-enabled ytd-video-renderer:has([href^="/shorts/"]),
-body.noshorts-enabled ytd-grid-video-renderer:has([href^="/shorts/"]),
+body.noshorts-enabled ytd-grid-video-renderer:has([href^="/shorts/"]) {
+  display: none !important;
+}
+
+/* General shorts elements */
 body.noshorts-enabled [is-shorts] {
   display: none !important;
 }
 
-/* Additional hiding for shorts navigation */
+/* Disable shorts links */
 body.noshorts-enabled a[href="/shorts"],
 body.noshorts-enabled a[href^="/shorts/"] {
-  pointer-events: none;
-  opacity: 0;
-  height: 0;
-  overflow: hidden;
+  pointer-events: none !important;
+  opacity: 0 !important;
+  height: 0 !important;
+  overflow: hidden !important;
 }
