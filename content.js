@@ -1,11 +1,26 @@
 // Check if shorts should be hidden
 let hideShortsEnabled = true; // Default to true
 
+// Wait for body to be available
+function waitForBody(callback) {
+  if (document.body) {
+    callback();
+  } else {
+    const observer = new MutationObserver(function() {
+      if (document.body) {
+        observer.disconnect();
+        callback();
+      }
+    });
+    observer.observe(document.documentElement, { childList: true });
+  }
+}
+
 // Initialize on load
 chrome.storage.sync.get(['hideShortsEnabled'], function(result) {
   hideShortsEnabled = result.hideShortsEnabled !== false;
   if (hideShortsEnabled) {
-    hideShorts();
+    waitForBody(() => hideShorts());
   }
 });
 
@@ -13,16 +28,19 @@ chrome.storage.sync.get(['hideShortsEnabled'], function(result) {
 chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
   if (request.action === 'toggleShorts') {
     hideShortsEnabled = request.enabled;
-    if (hideShortsEnabled) {
-      hideShorts();
-    } else {
-      showShorts();
-    }
+    waitForBody(() => {
+      if (hideShortsEnabled) {
+        hideShorts();
+      } else {
+        showShorts();
+      }
+    });
   }
 });
 
 // Function to hide shorts
 function hideShorts() {
+  if (!document.body) return;
   document.body.classList.add('noshorts-enabled');
   removeShorts();
   observeDOM();
@@ -30,6 +48,7 @@ function hideShorts() {
 
 // Function to show shorts
 function showShorts() {
+  if (!document.body) return;
   document.body.classList.remove('noshorts-enabled');
   if (observer) {
     observer.disconnect();
@@ -101,6 +120,8 @@ function removeShorts() {
 let observer = null;
 
 function observeDOM() {
+  if (!document.body) return;
+
   if (observer) {
     observer.disconnect();
   }
@@ -119,14 +140,8 @@ function observeDOM() {
 }
 
 // Run on initial load
-if (document.readyState === 'loading') {
-  document.addEventListener('DOMContentLoaded', function() {
-    if (hideShortsEnabled) {
-      hideShorts();
-    }
-  });
-} else {
+waitForBody(() => {
   if (hideShortsEnabled) {
     hideShorts();
   }
-}
+});
