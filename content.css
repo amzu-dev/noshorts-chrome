@@ -1,0 +1,22 @@
+/* Hide YouTube Shorts elements when enabled */
+body.noshorts-enabled ytd-rich-shelf-renderer[is-shorts],
+body.noshorts-enabled ytd-reel-shelf-renderer,
+body.noshorts-enabled ytd-reel-video-renderer,
+body.noshorts-enabled ytd-reel-item-renderer,
+body.noshorts-enabled ytd-guide-entry-renderer:has(a[href="/shorts"]),
+body.noshorts-enabled ytd-mini-guide-entry-renderer:has(a[href="/shorts"]),
+body.noshorts-enabled yt-tab-shape:has(a[href*="/shorts"]),
+body.noshorts-enabled ytd-video-renderer:has([href^="/shorts/"]),
+body.noshorts-enabled ytd-grid-video-renderer:has([href^="/shorts/"]),
+body.noshorts-enabled [is-shorts] {
+  display: none !important;
+}
+
+/* Additional hiding for shorts navigation */
+body.noshorts-enabled a[href="/shorts"],
+body.noshorts-enabled a[href^="/shorts/"] {
+  pointer-events: none;
+  opacity: 0;
+  height: 0;
+  overflow: hidden;
+}
