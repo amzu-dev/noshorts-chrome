@@ -29,12 +29,17 @@ chrome.storage.onChanged.addListener(async (changes, namespace) => {
 // Enable URL blocking rules
 async function enableBlockingRules() {
   try {
-    // Remove existing rules first
+    // Check if rule already exists
     const existingRules = await chrome.declarativeNetRequest.getDynamicRules();
-    const ruleIds = existingRules.map(rule => rule.id);
+    const ruleExists = existingRules.some(rule => rule.id === RULE_ID);
 
+    if (ruleExists) {
+      // Rule already exists, no need to add it again
+      return;
+    }
+
+    // Add the blocking rule
     await chrome.declarativeNetRequest.updateDynamicRules({
-      removeRuleIds: ruleIds,
       addRules: [
         {
           "id": RULE_ID,
@@ -60,6 +65,15 @@ async function enableBlockingRules() {
 // Disable URL blocking rules
 async function disableBlockingRules() {
   try {
+    // Check if rule exists before trying to remove
+    const existingRules = await chrome.declarativeNetRequest.getDynamicRules();
+    const ruleExists = existingRules.some(rule => rule.id === RULE_ID);
+
+    if (!ruleExists) {
+      // Rule doesn't exist, nothing to remove
+      return;
+    }
+
     await chrome.declarativeNetRequest.updateDynamicRules({
       removeRuleIds: [RULE_ID]
     });
